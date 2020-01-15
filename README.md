@@ -37,7 +37,7 @@ looking. You've came to the right place.
         - chmod +x send.sh
         - ./send.sh success $WEBHOOK_URL
       when: on_success
-    success_notification:
+    failure_notification:
       stage: notification
       script:
         - wget https://raw.githubusercontent.com/DiscordHooks/gitlab-ci-discord-webhook/master/send.sh
