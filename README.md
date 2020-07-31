@@ -50,6 +50,8 @@ looking. You've came to the right place.
     this repository to show your love.
 
 ### Note
+- If within your gitlab CI Code, you have a pause within the script code, this notiction yml code will still run, to fix this, we need to add allow_failure: false, this will mean the job will not run unless told to(see screenshot)
+
 -  If you face any issues in the scripts (and you're sure it's not on your side),
 please consider opening an issue and I'll fix it ASAP.
 -  If you want to improve the scripts, feel free to open a pull request.
