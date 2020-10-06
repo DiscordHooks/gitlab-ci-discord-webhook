@@ -19,7 +19,9 @@ looking. You've came to the right place.
 
 1.  Go to your repository CI/CD settings (for which you want status notifications)
     in GitLab and add an environment variable called `WEBHOOK_URL` and paste
-    the **Webhook URL** you got in the previous step.
+    the **Webhook URL** you got in the previous step. You can also specify
+    multiple webhook addresses at once, separating each with a whitespace
+    character, such as space.
 
     ![Add environment variable in GitLab](https://docs.gitlab.com/ee/ci/variables/img/new_custom_variables_example.png)
     See: https://docs.gitlab.com/ee/ci/variables/#via-the-ui
