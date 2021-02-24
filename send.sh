@@ -4,16 +4,19 @@ case $1 in
   "success" )
     EMBED_COLOR=3066993
     STATUS_MESSAGE="Passed"
+    ARTIFACT_URL="$CI_JOB_URL/artifacts/download"
     ;;
 
   "failure" )
     EMBED_COLOR=15158332
     STATUS_MESSAGE="Failed"
+    ARTIFACT_URL="Not available"
     ;;
 
   * )
     EMBED_COLOR=0
     STATUS_MESSAGE="Status Unknown"
+    ARTIFACT_URL="Not available"
     ;;
 esac
 
@@ -27,6 +30,7 @@ AUTHOR_NAME="$(git log -1 "$CI_COMMIT_SHA" --pretty="%aN")"
 COMMITTER_NAME="$(git log -1 "$CI_COMMIT_SHA" --pretty="%cN")"
 COMMIT_SUBJECT="$(git log -1 "$CI_COMMIT_SHA" --pretty="%s")"
 COMMIT_MESSAGE="$(git log -1 "$CI_COMMIT_SHA" --pretty="%b")" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g'
+
 
 if [ "$AUTHOR_NAME" == "$COMMITTER_NAME" ]; then
   CREDITS="$AUTHOR_NAME authored & committed"
@@ -63,6 +67,11 @@ WEBHOOK_DATA='{
       {
         "name": "Branch",
         "value": "'"[\`$CI_COMMIT_REF_NAME\`]($CI_PROJECT_URL/tree/$CI_COMMIT_REF_NAME)"'",
+        "inline": true
+      },
+      {
+        "name": "Artifacts",
+        "value": "'"[\`$CI_JOB_ID\`]($ARTIFACT_URL)"'",
         "inline": true
       }
     ],
