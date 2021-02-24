@@ -1,6 +1,6 @@
 # GitLab CI 🡒 Discord Webhook
 [![Backers on Open Collective](https://opencollective.com/discordhooks/backers/badge.svg)](#backers)
- [![Sponsors on Open Collective](https://opencollective.com/discordhooks/sponsors/badge.svg)](#sponsors) 
+ [![Sponsors on Open Collective](https://opencollective.com/discordhooks/sponsors/badge.svg)](#sponsors)
 
 If you are looking for a way to get build (success/fail) status reports from
 [GitLab CI](https://gitlab.com) in [Discord](https://discordapp.com), stop
@@ -50,6 +50,19 @@ looking. You've came to the right place.
 
 1.  Grab your coffee ☕ and enjoy! And, if you liked this, please ⭐**Star**
     this repository to show your love.
+
+### Artifacts
+
+  If you'd like to also link the artifacts in the CI Message, set the variable LINK_ARTIFACT to true:
+
+  ```yaml
+  variables:
+    LINK_ARTIFACT: "true"
+  ```
+
+  Make sure that the artifacts are available to download in the ```success_notification``` job. If they are produced by a previous one, you can follow [this StackOverflow question](https://stackoverflow.com/questions/38140996/how-can-i-pass-artifacts-to-another-stage "this StackOverflow question")
+
+  Please also note that artifacts are only available, if ```success_notification``` has been triggered. 
 
 ### Note
 -  If you face any issues in the scripts (and you're sure it's not on your side),
