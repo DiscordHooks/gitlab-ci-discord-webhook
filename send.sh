@@ -4,16 +4,19 @@ case $1 in
   "success" )
     EMBED_COLOR=3066993
     STATUS_MESSAGE="Passed"
+    ARTIFACT_URL="$CI_JOB_URL/artifacts/download"
     ;;
 
   "failure" )
     EMBED_COLOR=15158332
     STATUS_MESSAGE="Failed"
+    ARTIFACT_URL="Not available"
     ;;
 
   * )
     EMBED_COLOR=0
     STATUS_MESSAGE="Status Unknown"
+    ARTIFACT_URL="Not available"
     ;;
 esac
 
@@ -28,6 +31,7 @@ COMMITTER_NAME="$(git log -1 "$CI_COMMIT_SHA" --pretty="%cN")"
 COMMIT_SUBJECT="$(git log -1 "$CI_COMMIT_SHA" --pretty="%s")"
 COMMIT_MESSAGE="$(git log -1 "$CI_COMMIT_SHA" --pretty="%b")" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g'
 
+
 if [ "$AUTHOR_NAME" == "$COMMITTER_NAME" ]; then
   CREDITS="$AUTHOR_NAME authored & committed"
 else
@@ -41,34 +45,71 @@ else
 fi
 
 TIMESTAMP=$(date --utc +%FT%TZ)
-WEBHOOK_DATA='{
-  "username": "",
-  "avatar_url": "https://gitlab.com/favicon.png",
-  "embeds": [ {
-    "color": '$EMBED_COLOR',
-    "author": {
-      "name": "Pipeline #'"$CI_PIPELINE_IID"' '"$STATUS_MESSAGE"' - '"$CI_PROJECT_PATH_SLUG"'",
-      "url": "'"$CI_PIPELINE_URL"'",
-      "icon_url": "https://gitlab.com/favicon.png"
-    },
-    "title": "'"$COMMIT_SUBJECT"'",
-    "url": "'"$URL"'",
-    "description": "'"${COMMIT_MESSAGE//$'\n'/ }"\\n\\n"$CREDITS"'",
-    "fields": [
-      {
-        "name": "Commit",
-        "value": "'"[\`$CI_COMMIT_SHORT_SHA\`]($CI_PROJECT_URL/commit/$CI_COMMIT_SHA)"'",
-        "inline": true
+
+if [ -z $LINK_ARTIFACT ] || [ $LINK_ARTIFACT = false ] ; then
+  WEBHOOK_DATA='{
+    "username": "",
+    "avatar_url": "https://gitlab.com/favicon.png",
+    "embeds": [ {
+      "color": '$EMBED_COLOR',
+      "author": {
+        "name": "Pipeline #'"$CI_PIPELINE_IID"' '"$STATUS_MESSAGE"' - '"$CI_PROJECT_PATH_SLUG"'",
+        "url": "'"$CI_PIPELINE_URL"'",
+        "icon_url": "https://gitlab.com/favicon.png"
       },
-      {
-        "name": "Branch",
-        "value": "'"[\`$CI_COMMIT_REF_NAME\`]($CI_PROJECT_URL/tree/$CI_COMMIT_REF_NAME)"'",
-        "inline": true
-      }
-    ],
-    "timestamp": "'"$TIMESTAMP"'"
-  } ]
-}'
+      "title": "'"$COMMIT_SUBJECT"'",
+      "url": "'"$URL"'",
+      "description": "'"${COMMIT_MESSAGE//$'\n'/ }"\\n\\n"$CREDITS"'",
+      "fields": [
+        {
+          "name": "Commit",
+          "value": "'"[\`$CI_COMMIT_SHORT_SHA\`]($CI_PROJECT_URL/commit/$CI_COMMIT_SHA)"'",
+          "inline": true
+        },
+        {
+          "name": "Branch",
+          "value": "'"[\`$CI_COMMIT_REF_NAME\`]($CI_PROJECT_URL/tree/$CI_COMMIT_REF_NAME)"'",
+          "inline": true
+        }
+        ],
+        "timestamp": "'"$TIMESTAMP"'"
+      } ]
+    }'
+else
+	WEBHOOK_DATA='{
+		"username": "",
+		"avatar_url": "https://gitlab.com/favicon.png",
+		"embeds": [ {
+			"color": '$EMBED_COLOR',
+			"author": {
+			"name": "Pipeline #'"$CI_PIPELINE_IID"' '"$STATUS_MESSAGE"' - '"$CI_PROJECT_PATH_SLUG"'",
+			"url": "'"$CI_PIPELINE_URL"'",
+			"icon_url": "https://gitlab.com/favicon.png"
+			},
+			"title": "'"$COMMIT_SUBJECT"'",
+			"url": "'"$URL"'",
+			"description": "'"${COMMIT_MESSAGE//$'\n'/ }"\\n\\n"$CREDITS"'",
+			"fields": [
+			{
+				"name": "Commit",
+				"value": "'"[\`$CI_COMMIT_SHORT_SHA\`]($CI_PROJECT_URL/commit/$CI_COMMIT_SHA)"'",
+				"inline": true
+			},
+			{
+				"name": "Branch",
+				"value": "'"[\`$CI_COMMIT_REF_NAME\`]($CI_PROJECT_URL/tree/$CI_COMMIT_REF_NAME)"'",
+				"inline": true
+			},
+			{
+				"name": "Artifacts",
+				"value": "'"[\`$CI_JOB_ID\`]($ARTIFACT_URL)"'",
+				"inline": true
+			}
+			],
+			"timestamp": "'"$TIMESTAMP"'"
+		} ]
+	}'
+fi
 
 for ARG in "$@"; do
   echo -e "[Webhook]: Sending webhook to Discord...\\n";
