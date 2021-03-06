@@ -53,11 +53,11 @@ looking. You've came to the right place.
 
 ### Artifacts
 
-  If you'd like to also link the artifacts in the CI Message, set the variable LINK_ARTIFACT to true:
+  If you'd like to also link the artifacts in the CI Message, set the variable `LINK_ARTIFACT` to `true`:
 
   ```yaml
   variables:
-    LINK_ARTIFACT: "true"
+    LINK_ARTIFACT: true
   ```
 
   Make sure that the artifacts are available to download in the ```success_notification``` job. If they are produced by a previous one, you can follow [this StackOverflow question](https://stackoverflow.com/questions/38140996/how-can-i-pass-artifacts-to-another-stage "this StackOverflow question")
@@ -68,16 +68,13 @@ looking. You've came to the right place.
 -  If you face any issues in the scripts (and you're sure it's not on your side),
 please consider opening an issue and I'll fix it ASAP.
 -  If you want to improve the scripts, feel free to open a pull request.
--  If you are using an alpine image. Then your script will look as following:
-```yaml
-...
-script:
-  - apk add --update git curl
-  - wget -O send.sh https://raw.githubusercontent.com/DiscordHooks/gitlab-ci-discord-webhook/master/send.sh
-  - chmod +x send.sh
-  - /bin/ash ./send.sh success $WEBHOOK_URL
-...
-```
+-  If you are using an alpine image, you need to add `git` and `curl` packages before running this script.
+   ```yaml
+   # ...
+     script:
+       - apk add --update git curl
+   # ...
+   ```
 
 ### See Also
 -  [Travis CI -> Discord Webhook](https://github.com/DiscordHooks/travis-ci-discord-webhook)
