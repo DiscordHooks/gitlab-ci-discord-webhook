@@ -68,6 +68,16 @@ looking. You've came to the right place.
 -  If you face any issues in the scripts (and you're sure it's not on your side),
 please consider opening an issue and I'll fix it ASAP.
 -  If you want to improve the scripts, feel free to open a pull request.
+-  If you are using an alpine image. Then your script will look as following:
+```yaml
+...
+script:
+  - apk add --update git curl
+  - wget -O send.sh https://raw.githubusercontent.com/DiscordHooks/gitlab-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - /bin/ash ./send.sh success $WEBHOOK_URL
+...
+```
 
 ### See Also
 -  [Travis CI -> Discord Webhook](https://github.com/DiscordHooks/travis-ci-discord-webhook)
