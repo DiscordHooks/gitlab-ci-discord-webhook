@@ -48,6 +48,22 @@ looking. You've came to the right place.
       when: on_failure
     ```
 
+1.  (Optional) If you want a notification before the pipeline started, add these lines, in their appropiate locations on the `.gitlab-ci.yml`
+
+    ```yaml
+    stages:
+      - build
+      - deploy  # adjust with your deployment stage
+      - notification  # this is the after-build notification
+
+    start_build:
+      stage: build
+      script:
+        - wget "https://gitlab.assemblrworld.com/api/v4/projects/92/repository/files/send.sh/raw?ref=master&private_token=YCTyexwYkcpV77GQsJgu" -O send.sh
+        - chmod +x send.sh
+        - ./send.sh building $WEBHOOK_URL
+    ```
+
 1.  Grab your coffee ☕ and enjoy! And, if you liked this, please ⭐**Star**
     this repository to show your love.
 
