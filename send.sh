@@ -3,19 +3,19 @@
 case $1 in
   "success" )
     EMBED_COLOR=3066993
-    STATUS_MESSAGE="Passed"
+    STATUS_MESSAGE="${STATUS_MESSAGE:-'Passed'}"
     ARTIFACT_URL="$CI_JOB_URL/artifacts/download"
     ;;
 
   "failure" )
     EMBED_COLOR=15158332
-    STATUS_MESSAGE="Failed"
+    STATUS_MESSAGE="${STATUS_MESSAGE:-'Failed'}"
     ARTIFACT_URL="Not available"
     ;;
 
   * )
     EMBED_COLOR=0
-    STATUS_MESSAGE="Status Unknown"
+    STATUS_MESSAGE="${STATUS_MESSAGE:-'Status Unknown'}"
     ARTIFACT_URL="Not available"
     ;;
 esac
