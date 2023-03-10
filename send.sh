@@ -1,6 +1,12 @@
 #!/bin/bash
 
 case $1 in
+  "building" )
+    EMBED_COLOR=1796534
+    STATUS_MESSAGE="Building"
+    ARTIFACT_URL="Not available"
+    ;;
+
   "success" )
     EMBED_COLOR=3066993
     STATUS_MESSAGE="Passed"
