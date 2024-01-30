@@ -57,7 +57,7 @@ looking. You've came to the right place.
 
   ```yaml
   variables:
-    LINK_ARTIFACT: true
+    LINK_ARTIFACT: "true"
   ```
 
   Make sure that the artifacts are available to download in the ```success_notification``` job. If they are produced by a previous one, you can follow [this StackOverflow question](https://stackoverflow.com/questions/38140996/how-can-i-pass-artifacts-to-another-stage "this StackOverflow question")
